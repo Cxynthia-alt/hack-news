@@ -25,6 +25,7 @@ class Story {
 
   getHostName() {
     // UNIMPLEMENTED: complete this function!
+    //displayed on user interface
     return "hostname.com";
   }
 }
@@ -73,8 +74,14 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
+  async addStory(user, { title, author, url } /* user, newStory */) {
     // UNIMPLEMENTED: complete this function!
+    const token = user.loginToken
+    const res = await axios.post(`${BASE_URL}/stories`, {
+      token,
+      story: { title, author, url }
+    })
+
   }
 }
 
@@ -90,13 +97,13 @@ class User {
    */
 
   constructor({
-                username,
-                name,
-                createdAt,
-                favorites = [],
-                ownStories = []
-              },
-              token) {
+    username,
+    name,
+    createdAt,
+    favorites = [],
+    ownStories = []
+  },
+    token) {
     this.username = username;
     this.name = name;
     this.createdAt = createdAt;
@@ -142,7 +149,15 @@ class User {
    * - username: an existing user's username
    * - password: an existing user's password
    */
+  //separate things: static * async
+  //call login method without having to create obj for user class
+  //with static keyword
+  //User.login()
+  //without static keyword
+  // let newUser = new User();
+  // newUser.login();
 
+  //if no one logs in, there's no user obj (why we need to use static and call login method)
   static async login(username, password) {
     const response = await axios({
       url: `${BASE_URL}/login`,
@@ -151,6 +166,9 @@ class User {
     });
 
     let { user } = response.data;
+    //let user = response.data.user;
+    //destructuring the data: pull out user from the data obj
+    //user is gonna be a variable that contains all the info from user obj
 
     return new User(
       {
