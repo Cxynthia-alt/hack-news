@@ -3,12 +3,12 @@
 // This is the global list of the stories, an instance of StoryList
 let storyList;
 
+
 /** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
   $storiesLoadingMsg.remove();
-
   putStoriesOnPage();
 }
 
@@ -20,11 +20,15 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+  console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+        <span class="star">
+          <i class="far fa-star">
+          </i>
+        </span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -34,6 +38,9 @@ function generateStoryMarkup(story) {
       </li>
     `);
 }
+
+
+
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
@@ -50,3 +57,22 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+
+//get data from new story form, call addStory and put new story to html
+
+async function addNewStoryOnPage(evt) {
+  console.debug("addNewStoryOnPage");
+  evt.preventDefault();
+  const author = document.querySelector('#newAuthor').value;
+  const title = document.querySelector('#newTitle').value;
+  const url = document.querySelector('#newUrl').value;
+  const username = currentUser.username;
+  const storyData = { title, url, author, username };
+
+
+  const newStoryMarkup = await storyList.addStory(currentUser, storyData);
+  const $newStory = generateStoryMarkup(newStoryMarkup);
+  $allStoriesList.prepend($newStory);
+}
+$storyForm.on('submit', addNewStoryOnPage)

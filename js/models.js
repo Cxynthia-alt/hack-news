@@ -24,9 +24,9 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    //displayed on user interface
-    return "hostname.com";
+    let domain = new URL(this.url);
+    domain = domain.hostname;
+    return domain;
   }
 }
 
@@ -82,6 +82,10 @@ class StoryList {
       story: { title, author, url }
     })
 
+    const newStory = new Story(res.data.story);
+    this.stories.unshift(newStory);
+    user.ownStories.unshift(newStory);
+    return newStory
   }
 }
 
@@ -144,6 +148,15 @@ class User {
     );
   }
 
+  static async userFavorite(username, storyId, token) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+      method: 'POST',
+      data: { token: this.loginToken }
+    })
+    console.log(response.data)
+  }
+
   /** Login in user with API, make User instance & return it.
 
    * - username: an existing user's username
@@ -169,6 +182,8 @@ class User {
     //let user = response.data.user;
     //destructuring the data: pull out user from the data obj
     //user is gonna be a variable that contains all the info from user obj
+
+
 
     return new User(
       {
