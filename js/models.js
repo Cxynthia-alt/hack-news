@@ -148,13 +148,15 @@ class User {
     );
   }
 
-  static async userFavorite(username, storyId, token) {
+
+  async userFavorite(username, storyId, token) {
     const response = await axios({
-      url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
       method: 'POST',
       data: { token: this.loginToken }
     })
-    console.log(response.data)
+    this.favorites.push(response.data.user.favorites)
+    console.log(this.favorites)
   }
 
   /** Login in user with API, make User instance & return it.
