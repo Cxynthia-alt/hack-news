@@ -18,17 +18,14 @@ async function getAndShowStoriesOnStart() {
  *
  * Returns the markup for the story.
  */
-
+const showStar = Boolean(currentUser);
 function generateStoryMarkup(story) {
-  console.debug("generateStoryMarkup", story);
+  // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <span class="star">
-          <i class="far fa-star">
-          </i>
-        </span>
+        ${showStar ? getStarHTML(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -39,6 +36,13 @@ function generateStoryMarkup(story) {
     `);
 }
 
+function getStarHTML(story, user) {
+  const isFavorite = user.isFavorite(story);
+  const starType = isFavorite ? "fas" : "far";
+  return `<span class = "star">
+            <i class="${starType} fa-star></i>
+          <span>`
+}
 
 
 

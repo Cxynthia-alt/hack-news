@@ -18,7 +18,7 @@ const $navSubmit = $("#nav-submit-story")
 const $storyForm = $('#newStory-form')
 
 const $myStory = $("#nav-my-stories")
-
+const $storiesLists = $(".stories-list");
 
 
 /** To make it easier for individual components to show just themselves, this

@@ -114,3 +114,28 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+
+// add favorite story
+async function addFavoriteStory(evt) {
+  // console.debug('addFavoriteStory', evt)
+  evt.preventDefault()
+  const $selectedLi = $(evt.target).closest('li')
+  const selectedId = $selectedLi.attr('id')
+  // console.log($selectedLi.find('span'));
+  // $selectedLi.find('span').toggleClass('fa fa-star')
+
+  // console.log(currentUser.favorites)
+
+  // for (let favStory of currentUser.favorites) {
+  //   if (selectedId !== favStory.storyId) {
+
+
+  //   }
+  // }
+  // await currentUser.userFavorite(selectedId);
+
+
+}
+$storiesLists.on('click', '.star', addFavoriteStory)
+// console.log($('.storyies-list'))
