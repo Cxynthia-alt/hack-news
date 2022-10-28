@@ -18,9 +18,9 @@ async function getAndShowStoriesOnStart() {
  *
  * Returns the markup for the story.
  */
-const showStar = Boolean(currentUser);
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
+  const showStar = Boolean(currentUser);
 
   const hostName = story.getHostName();
   return $(`
@@ -40,10 +40,9 @@ function getStarHTML(story, user) {
   const isFavorite = user.isFavorite(story);
   const starType = isFavorite ? "fas" : "far";
   return `<span class = "star">
-            <i class="${starType} fa-star></i>
-          <span>`
+            <i class="${starType} fa-star"></i>
+          </span>`
 }
-
 
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */

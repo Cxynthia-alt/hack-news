@@ -44,8 +44,15 @@ $navSubmit.on("click", addNewStory)
 
 
 //add new stories to my stories
-function addNewStoryToMyStories(evt) {
-  console.debug('addNewStoryToMyStories')
+function updateFavoriteStories(evt) {
+  console.debug('updateFavoriteStories')
   // evt.preventDefault();
-
+  hidePageComponents();
+  console.log(currentUser.favorites)
+  for (let fav of currentUser.favorites) {
+    const $favStory = generateStoryMarkup(fav);
+    $favoriteStoryList.append($favStory)
+  }
+  $favoriteStoryList.show();
 }
+$favoriteStoryBtn.on('click', updateFavoriteStories)
