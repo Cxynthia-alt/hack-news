@@ -120,14 +120,15 @@ function updateUIOnUserLogin() {
 async function addFavoriteStory(evt) {
   // console.debug('addFavoriteStory', evt)
   evt.preventDefault()
-  const $selectedLi = $(evt.target).closest('li')
+  const $target = $(evt.target);
+  const $selectedLi = $target.closest('li')
   const selectedId = $selectedLi.attr('id')
 
-  if ($(evt.target).hasClass('fas')) {
-    $selectedLi.toggleClass('far')
+  if ($target.hasClass('fas')) {
+    $target.closest('i').toggleClass('fas far')
   } else {
     await currentUser.userFavorite(selectedId)
-    $selectedLi.toggleClass('fas')
+    $target.closest('i').toggleClass('far fas')
   }
 
 }
