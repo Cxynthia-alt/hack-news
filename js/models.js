@@ -162,9 +162,37 @@ class User {
     // console.log(this.favorites);
   }
 
+  async removeFavorite(storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: 'DELETE',
+      data: { token: this.loginToken }
+    })
+    this.favorites = response.data.user.favorites
+    // console.log(response.data.user.favorites)
+    // console.log(this.favorites)
+  }
   isFavorite(story) {
     return this.favorites.some(s => (s.storyId === story.storyId))
   }
+
+  isOwnstories(story) {
+    return this.ownStories.some(s => (s.storyId === story.storyId))
+  }
+
+  async removeOwnStory(storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'DELETE',
+      data: { token: this.loginToken }
+    })
+    for (let ownStory of this.ownStories) {
+      if (this.ownStories[storyId] === storyId) {
+        delete this.ownStories[storyId]
+      }
+    }
+  }
+
 
   /** Login in user with API, make User instance & return it.
 

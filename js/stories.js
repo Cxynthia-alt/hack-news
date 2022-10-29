@@ -30,10 +30,17 @@ function generateStoryMarkup(story) {
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
+        ${getDeleteBtn(story, currentUser) ? `<i class="fas fa-trash"></i>` : ""}
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
       </li>
     `);
+}
+
+// ${showDeleteBtn ? getDeleteBtn() : ""}
+// const showDeleteBtn = Boolean(currentUser.ownStories.length !== 0)
+function getDeleteBtn(story, user) {
+  return user.isOwnstories(story)
 }
 
 function getStarHTML(story, user) {

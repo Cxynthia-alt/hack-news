@@ -125,6 +125,7 @@ async function addFavoriteStory(evt) {
   const selectedId = $selectedLi.attr('id')
 
   if ($target.hasClass('fas')) {
+    await currentUser.removeFavorite(selectedId)
     $target.closest('i').toggleClass('fas far')
   } else {
     await currentUser.userFavorite(selectedId)
@@ -133,4 +134,14 @@ async function addFavoriteStory(evt) {
 
 }
 $storiesLists.on('click', '.star', addFavoriteStory)
-// console.log($('.storyies-list'))
+
+
+// remove a story
+
+async function removeStory(evt) {
+  const $target = $(evt.target);
+  const $selectedLi = $target.closest('li')
+  const selectedId = $selectedLi.attr('id')
+  await currentUser.removeOwnStory(selectedId);
+}
+$storiesLists.on('click', '.fa-trash', removeStory)
