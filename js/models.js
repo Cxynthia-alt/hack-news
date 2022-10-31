@@ -25,8 +25,8 @@ class Story {
 
   getHostName() {
     let domain = new URL(this.url);
-    domain = domain.hostname;
-    return domain;
+    return domain.hostname;
+
   }
 }
 
@@ -76,16 +76,19 @@ class StoryList {
 
   async addStory(user, { title, author, url } /* user, newStory */) {
     // UNIMPLEMENTED: complete this function!
-    const token = user.loginToken
-    const res = await axios.post(`${BASE_URL}/stories`, {
-      token,
-      story: { title, author, url }
-    })
+    try {
+      const token = user.loginToken
+      const res = await axios.post(`${BASE_URL}/stories`, {
+        token,
+        story: { title, author, url }
+      })
 
-    const newStory = new Story(res.data.story);
-    this.stories.unshift(newStory);
-    user.ownStories.unshift(newStory);
-    return newStory
+      const newStory = new Story(res.data.story);
+      this.stories.unshift(newStory);
+      user.ownStories.unshift(newStory);
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
@@ -155,11 +158,11 @@ class User {
       method: 'POST',
       data: { token: this.loginToken }
     })
-    // console.log(response);
-    const favArr = response.data.user.favorites;
-    this.favorites.push(favArr[favArr.length - 1]);
 
-    // console.log(this.favorites);
+
+    this.favorites = response.data.user.favorites
+
+
   }
 
   async removeFavorite(storyId) {
@@ -169,8 +172,6 @@ class User {
       data: { token: this.loginToken }
     })
     this.favorites = response.data.user.favorites
-    // console.log(response.data.user.favorites)
-    // console.log(this.favorites)
   }
   isFavorite(story) {
     return this.favorites.some(s => (s.storyId === story.storyId))
@@ -187,7 +188,7 @@ class User {
       data: { token: this.loginToken }
     })
     for (let ownStory of this.ownStories) {
-      if (this.ownStories[storyId] === storyId) {
+      if (ownStory[storyId] === storyId) {
         delete this.ownStories[storyId]
       }
     }

@@ -38,6 +38,7 @@ function updateNavOnLogin() {
 /** show new story form when a user clicks on 'submit'  */
 function addNewStory(evt) {
   console.debug('addNewStory');
+  $allStoriesList.hide();
   $storyForm.show();
 }
 $navSubmit.on("click", addNewStory)
@@ -46,9 +47,7 @@ $navSubmit.on("click", addNewStory)
 //add new stories to my stories
 function updateFavoriteStories(evt) {
   console.debug('updateFavoriteStories')
-  // evt.preventDefault();
   hidePageComponents();
-  // console.log(currentUser.favorites)
   for (let fav of currentUser.favorites) {
     const $favStory = generateStoryMarkup(fav);
     $favoriteStoryList.append($favStory)
