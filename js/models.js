@@ -160,7 +160,7 @@ class User {
     })
 
 
-    this.favorites = response.data.user.favorites
+    this.favorites = response.data.user.favorites.map((s) => new Story(s))
 
 
   }
@@ -171,7 +171,7 @@ class User {
       method: 'DELETE',
       data: { token: this.loginToken }
     })
-    this.favorites = response.data.user.favorites
+    this.favorites = response.data.user.favorites.map((s) => new Story(s))
   }
   isFavorite(story) {
     return this.favorites.some(s => (s.storyId === story.storyId))
@@ -189,9 +189,10 @@ class User {
     })
     for (let ownStory of this.ownStories) {
       if (ownStory[storyId] === storyId) {
-        delete this.ownStories[storyId]
+        delete ownStory[storyId]
       }
     }
+
   }
 
 

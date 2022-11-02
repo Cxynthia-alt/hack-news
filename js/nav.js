@@ -46,15 +46,17 @@ $navSubmit.on("click", addNewStory)
 
 //add new stories to my stories
 function updateFavoriteStories(evt) {
-  console.debug('updateFavoriteStories')
+  // console.debug('updateFavoriteStories')
+  // e.preventDefault();
   hidePageComponents();
+
   for (let fav of currentUser.favorites) {
     const $favStory = generateStoryMarkup(fav);
     $favoriteStoryList.append($favStory)
   }
   $favoriteStoryList.show();
 }
-$favoriteStoryBtn.on('click', updateFavoriteStories)
+$favoriteStoryBtn.on('click', updateFavoriteStories).prop('disabled', true);
 
 
 // show stories created by login user
