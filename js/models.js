@@ -24,8 +24,9 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    let domain = new URL(this.url);
+    return domain.hostname;
+
   }
 }
 
@@ -73,8 +74,21 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
+  async addStory(user, { title, author, url } /* user, newStory */) {
     // UNIMPLEMENTED: complete this function!
+    try {
+      const token = user.loginToken
+      const res = await axios.post(`${BASE_URL}/stories`, {
+        token,
+        story: { title, author, url }
+      })
+
+      const newStory = new Story(res.data.story);
+      this.stories.unshift(newStory);
+      user.ownStories.unshift(newStory);
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
@@ -90,13 +104,13 @@ class User {
    */
 
   constructor({
-                username,
-                name,
-                createdAt,
-                favorites = [],
-                ownStories = []
-              },
-              token) {
+    username,
+    name,
+    createdAt,
+    favorites = [],
+    ownStories = []
+  },
+    token) {
     this.username = username;
     this.name = name;
     this.createdAt = createdAt;
@@ -137,12 +151,65 @@ class User {
     );
   }
 
+
+  async userFavorite(storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: 'POST',
+      data: { token: this.loginToken }
+    })
+
+
+    this.favorites = response.data.user.favorites.map((s) => new Story(s))
+
+
+  }
+
+  async removeFavorite(storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: 'DELETE',
+      data: { token: this.loginToken }
+    })
+    this.favorites = response.data.user.favorites.map((s) => new Story(s))
+  }
+  isFavorite(story) {
+    return this.favorites.some(s => (s.storyId === story.storyId))
+  }
+
+  isOwnstories(story) {
+    return this.ownStories.some(s => (s.storyId === story.storyId))
+  }
+
+  async removeOwnStory(storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'DELETE',
+      data: { token: this.loginToken }
+    })
+    for (let ownStory of this.ownStories) {
+      if (ownStory[storyId] === storyId) {
+        delete ownStory[storyId]
+      }
+    }
+
+  }
+
+
   /** Login in user with API, make User instance & return it.
 
    * - username: an existing user's username
    * - password: an existing user's password
    */
+  //separate things: static * async
+  //call login method without having to create obj for user class
+  //with static keyword
+  //User.login()
+  //without static keyword
+  // let newUser = new User();
+  // newUser.login();
 
+  //if no one logs in, there's no user obj (why we need to use static and call login method)
   static async login(username, password) {
     const response = await axios({
       url: `${BASE_URL}/login`,
@@ -151,6 +218,11 @@ class User {
     });
 
     let { user } = response.data;
+    //let user = response.data.user;
+    //destructuring the data: pull out user from the data obj
+    //user is gonna be a variable that contains all the info from user obj
+
+
 
     return new User(
       {

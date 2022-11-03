@@ -114,3 +114,34 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+
+// add favorite story
+async function addFavoriteStory(evt) {
+  // console.debug('addFavoriteStory', evt)
+  evt.preventDefault()
+  const $target = $(evt.target);
+  const $selectedLi = $target.closest('li')
+  const selectedId = $selectedLi.attr('id')
+
+  if ($target.hasClass('fas')) {
+    await currentUser.removeFavorite(selectedId)
+    $target.closest('i').toggleClass('fas far')
+  } else {
+    await currentUser.userFavorite(selectedId)
+    $target.closest('i').toggleClass('far fas')
+  }
+
+}
+$storiesLists.on('click', '.star', addFavoriteStory)
+
+
+// remove a story
+
+async function removeStory(evt) {
+  const $target = $(evt.target);
+  const $selectedLi = $target.closest('li')
+  const selectedId = $selectedLi.attr('id')
+  await currentUser.removeOwnStory(selectedId);
+}
+$storiesLists.on('click', '.fa-trash', removeStory)

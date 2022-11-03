@@ -7,7 +7,7 @@
 /** Show main list of all stories when click site name */
 
 function navAllStories(evt) {
-  console.debug("navAllStories", evt);
+  // console.debug("navAllStories", evt);
   hidePageComponents();
   putStoriesOnPage();
 }
@@ -34,3 +34,38 @@ function updateNavOnLogin() {
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
+
+/** show new story form when a user clicks on 'submit'  */
+function addNewStory(evt) {
+  console.debug('addNewStory');
+  $allStoriesList.hide();
+  $storyForm.show();
+}
+$navSubmit.on("click", addNewStory)
+
+
+//add new stories to my stories
+function updateFavoriteStories(evt) {
+  // console.debug('updateFavoriteStories')
+  // e.preventDefault();
+  hidePageComponents();
+
+  for (let fav of currentUser.favorites) {
+    const $favStory = generateStoryMarkup(fav);
+    $favoriteStoryList.append($favStory)
+  }
+  $favoriteStoryList.show();
+}
+$favoriteStoryBtn.on('click', updateFavoriteStories).prop('disabled', true);
+
+
+// show stories created by login user
+function showUserStories(evt) {
+  hidePageComponents();
+  for (let ownStory of currentUser.ownStories) {
+    const $ownStory = generateStoryMarkup(ownStory);
+    $myStoryList.append($ownStory)
+  }
+  $myStoryList.show();
+}
+$myStoryBtn.on('click', showUserStories)
