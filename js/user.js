@@ -118,7 +118,6 @@ function updateUIOnUserLogin() {
 
 // add favorite story
 async function addFavoriteStory(evt) {
-  // console.debug('addFavoriteStory', evt)
   evt.preventDefault()
   const $target = $(evt.target);
   const $selectedLi = $target.closest('li')
